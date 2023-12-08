@@ -11,6 +11,16 @@ class ClientController extends Controller
 {
     use HttpResponses;
 
+    public function index(Request $request) {
+        $params = $request->query();
+
+        $clients = Client::query();
+
+        if($request->has('name') && !empty($params['name'])) {
+            $clients->where('name', 'ilike', "%".$params['name']."%");
+        }
+    }
+
     public function store(Request $request){
 
         try {
