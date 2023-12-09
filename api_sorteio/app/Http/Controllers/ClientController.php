@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ClientController extends Controller
@@ -64,6 +65,8 @@ class ClientController extends Controller
             ]);
 
             $client = Client::find($id);
+
+            if(!$client) return $this->error('Cliente não encontrado', Response::HTTP_NOT_FOUND);
 
             $client->update($data);
 
