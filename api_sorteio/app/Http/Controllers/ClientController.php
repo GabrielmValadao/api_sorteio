@@ -50,4 +50,27 @@ class ClientController extends Controller
             return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
+
+    public function update($id, Request $request) {
+
+        try {
+            $data = $request->only('name', 'email', 'date_birth', 'address');
+
+            $request->validate([
+                'name' => 'string',
+                'email' => 'email|unique:clients',
+                'date_birth' => 'date_format:Y-m-d',
+                'address' => 'string'
+            ]);
+
+            $client = Client::find($id);
+
+            $client->update($data);
+
+            return $client;
+
+        } catch(\Exception $exception) {
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
