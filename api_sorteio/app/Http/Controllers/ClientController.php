@@ -28,9 +28,9 @@ class ClientController extends Controller
 
             $request->validate([
                 'name' => 'string|required',
-                'cpf' => 'string|required|unique:clients',
                 'email' => 'email|required|unique:clients',
                 'date_birth' => 'date_format:Y-m-d|required',
+                'cpf' => 'string|required|unique:clients',
                 'address' => 'string|required'
             ]);
 
@@ -39,7 +39,7 @@ class ClientController extends Controller
             return $client;
 
         } catch(\Exception $exception) {
-            return $this->error($exception->getMessage(), Response::HTTP_NOT_FOUND);
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }
