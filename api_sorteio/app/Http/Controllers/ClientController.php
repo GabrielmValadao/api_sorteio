@@ -11,6 +11,24 @@ class ClientController extends Controller
 {
     use HttpResponses;
 
+    public function index(Request $request) {
+        $params = $request->query();
+
+        $clients = Client::query();
+
+        if($request->has('name') && !empty($params['name'])) {
+            $clients->where('name', 'ilike', "%".$params['name']."%");
+        }
+        if($request->has('cpf') && !empty($params['cpf'])) {
+            $clients->where('cpf', $params['cpf']);
+        }
+        if($request->has('date_birth') && !empty($params['date_birth'])) {
+            $clients->where('date_birth', $params['date_birth']);
+        }
+
+        return $clients->get();
+    }
+
     public function store(Request $request){
 
         try {
@@ -18,9 +36,9 @@ class ClientController extends Controller
 
             $request->validate([
                 'name' => 'string|required',
-                'cpf' => 'string|required|unique:clients',
                 'email' => 'email|required|unique:clients',
                 'date_birth' => 'date_format:Y-m-d|required',
+                'cpf' => 'string|required|unique:clients',
                 'address' => 'string|required'
             ]);
 
@@ -29,7 +47,7 @@ class ClientController extends Controller
             return $client;
 
         } catch(\Exception $exception) {
-            return $this->error($exception->getMessage(), Response::HTTP_NOT_FOUND);
+            return $this->error($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
     }
 }
