@@ -15,7 +15,7 @@ class PopulateAwardsTable extends Seeder
     {
         Award::create([
             'name' => '',
-            'descption' => 'local',
+            'descrption' => 'local',
             'value' => '',
             'amount' => '',
             'date' => '',
