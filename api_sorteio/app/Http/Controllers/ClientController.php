@@ -19,6 +19,14 @@ class ClientController extends Controller
         if($request->has('name') && !empty($params['name'])) {
             $clients->where('name', 'ilike', "%".$params['name']."%");
         }
+        if($request->has('cpf') && !empty($params['cpf'])) {
+            $clients->where('cpf', $params['cpf']);
+        }
+        if($request->has('date_birth') && !empty($params['date_birth'])) {
+            $clients->where('date_birth', $params['date_birth']);
+        }
+
+        return $clients->get();
     }
 
     public function store(Request $request){
