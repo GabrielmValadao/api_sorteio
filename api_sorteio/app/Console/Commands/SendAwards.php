@@ -38,7 +38,7 @@ class SendAwards extends Command
             $clients = Client::query()->take($award->amount)->inRandomOrder()->get();
 
             foreach($clients as $client) {
-                Mail::to($client->email, $client->name)->send(new SendAwardsToClient($client));
+                Mail::to($client->email, $client->name)->send(new SendAwardsToClient($client, $award));
             }
         }
     }

@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Award;
 use App\Models\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,9 +20,12 @@ class SendAwardsToClient extends Mailable
      */
 
     public $client;
-    public function __construct(Client $client)
+    public $award;
+
+    public function __construct(Client $client, Award $award)
     {
         $this->client = $client;
+        $this->award = $award;
     }
 
     /**
