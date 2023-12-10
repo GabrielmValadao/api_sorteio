@@ -32,10 +32,10 @@ class SendAwards extends Command
     {
 
         $date = (new DateTime('now'))->format('Y-m-d H:i');
-        $awards = Award::query()->whereBetween('date', ["date:00", "date:59"])->get();
+        $awards = Award::query()->whereBetween('date', ["$date:00", "$date:59"])->get();
 
         foreach ($awards as $award) {
-            $clients = Client::query()->take($award->amount)->inRandomOrder();
+            $clients = Client::query()->take($award->amount)->inRandomOrder()->get();
 
             foreach($clients as $client) {
                 Mail::to($client->email, $client->name)->send(new SendAwardsToClient($client));

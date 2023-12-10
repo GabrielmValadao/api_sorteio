@@ -40,7 +40,7 @@ class SendAwardsToClient extends Mailable
     public function content(): Content
     {
         return new Content(
-            html: 'view.SendAward',
+            html: 'emails.SendAward',
         );
     }
 
