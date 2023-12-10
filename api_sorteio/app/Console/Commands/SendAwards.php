@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\SendAwardsToClient;
 use App\Models\Award;
+use App\Models\Client;
 use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class SendAwards extends Command
 {
@@ -27,7 +30,16 @@ class SendAwards extends Command
      */
     public function handle()
     {
+
         $date = (new DateTime('now'))->format('Y-m-d H:i');
-        Award::query()->where('date', '>=',$date)->get();
+        $awards = Award::query()->whereBetween('date', ["date:00", "date:59"])->get();
+
+        foreach ($awards as $award) {
+            $clients = Client::query()->take($award->amount)->inRandomOrder();
+
+            foreach($clients as $client) {
+                Mail::to($client->email, $client->name)->send(new SendAwardsToClient($client));
+            }
+        }
     }
 }
