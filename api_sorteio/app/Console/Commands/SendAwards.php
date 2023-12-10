@@ -7,6 +7,7 @@ use App\Models\Award;
 use App\Models\Client;
 use DateTime;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendAwards extends Command
@@ -37,7 +38,10 @@ class SendAwards extends Command
         foreach ($awards as $award) {
             $clients = Client::query()->take($award->amount)->inRandomOrder()->get();
 
+            Log::info($award->amount);
+
             foreach($clients as $client) {
+                Log::info("Enviando email para $client");
                 Mail::to($client->email, $client->name)->send(new SendAwardsToClient($client, $award));
             }
         }
